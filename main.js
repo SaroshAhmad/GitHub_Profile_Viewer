@@ -1,31 +1,50 @@
+// Ensure the DOM is loaded before adding event listeners
+document.addEventListener("DOMContentLoaded", function () {
+    const fetchButton = document.getElementById('fetchButton');
+    fetchButton.addEventListener('click', fetchProfile);
+});
+
 function fetchProfile() {
-    const username = document.getElementById('searchUser').value;
-    if (!username) {
-        alert('Please enter a username');
+    const name = document.getElementById('searchUser').value;
+
+    if (!name) {
+        alert('Please enter a GitHub username or name');
         return;
     }
 
-    fetch(`https://api.github.com/users/${username}`).then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
+    // Fetching users by name
+    fetch(`https://api.github.com/search/users?q=${encodeURIComponent(name)}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('User not found. Please enter a valid GitHub name or username.');
+            }
+            return response.json(); // Parse JSON response
+        })
         .then(data => {
-            displayProfile(data);
+            if (data.total_count === 0) {
+                throw new Error('No users found with that name.');
+            }
+            // Display the first user found
+            displayProfile(data.items[0]);
         })
         .catch(error => {
-            console.error('There has been a problem with your fetch operation:', error);
-        })
+            const profile = document.getElementById('profile');
+            profile.innerHTML = `<p style="color:red; font-weight: bold;">${error.message}</p>`;
+            profile.style.display = 'block';
+        });
 }
 
 function displayProfile(profileData) {
     const profile = document.getElementById('profile');
+
+    // Update profile card content
     profile.innerHTML = `
-        <img src="${profileData.avatar_url}" style="width:100px; height:100px; border-radius:50%" alt="${profileData.login}" />
-        <h2>${profileData.name}</h2>
-        <p>${profileData.bio}</p>
-        <p>${profileData.location}</p>
-        <p>${profileData.public_repos} public repos</p>
+        <img src="${profileData.avatar_url}" alt="${profileData.login}" />
+        <h2>${profileData.login}</h2>
+        <p>Name: ${profileData.name ? profileData.name : 'No name available'}</p>
+        <p>Profile URL: <a href="${profileData.html_url}" target="_blank">${profileData.html_url}</a></p>
     `;
+
+    // Make the profile card visible
+    profile.style.display = 'block';
 }
