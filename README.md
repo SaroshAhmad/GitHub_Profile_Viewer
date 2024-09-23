@@ -1,4 +1,4 @@
-# GitHub Profile Finder
+# GitHub Profile Viewer
 
 A simple web application that allows users to search for GitHub profiles by username or name. This project leverages the GitHub API to fetch user information and display it in a user-friendly format.
 
@@ -26,4 +26,4 @@ A simple web application that allows users to search for GitHub profiles by user
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/github-profile-finder.git
+   git clone https://github.com/SaroshAhmad/GitHub_Profile_Viewer.git
