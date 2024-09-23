@@ -1,5 +1,5 @@
 function fetchProfile() {
-    const username = document.getElementById('username').value;
+    const username = document.getElementById('searchUser').value;
     if (!username) {
         alert('Please enter a username');
         return;
@@ -21,5 +21,11 @@ function fetchProfile() {
 
 function displayProfile(profileData) {
     const profile = document.getElementById('profile');
+    profile.innerHTML = `
+        <img src="${profileData.avatar_url}" style="width:100px; height:100px; border-radius:50%" alt="${profileData.login}" />
+        <h2>${profileData.name}</h2>
+        <p>${profileData.bio}</p>
+        <p>${profileData.location}</p>
+        <p>${profileData.public_repos} public repos</p>
     `;
 }
